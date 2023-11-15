@@ -1,7 +1,8 @@
+import 'express-async-errors';
 import express, {Application} from 'express';
 import morgan from 'morgan';
+import mongoose from 'mongoose';
 
-//TODO: figure out the TSConfig stuff
 import { appConfig } from './configs';
 import { errorHandler } from './middlewares/ErrorHandler'
 import router from './routes/router';
@@ -35,7 +36,15 @@ class Server {
     private addErrorHandler(){
         this.app.use(errorHandler);
     }
-
+    
+    public async connectToDB() {
+        try {
+            await mongoose.connect(appConfig.dburi);
+            console.log("Connected to Database")
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 export default Server;
